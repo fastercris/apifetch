@@ -1,7 +1,7 @@
 const spinnerContainer = document.getElementById('spinner');
 
 const encabezadoTabla = () => {
-    return `
+  return `
     <table class="table table-hover">
     <thead>
       <tr>
@@ -17,7 +17,7 @@ const encabezadoTabla = () => {
 };
 
 const cuerpoTabla = (user) => {
-    return `
+  return `
     <tr>
       <th scope="row">${user.id}</th>
       <td>${user.email}</td>
@@ -29,29 +29,31 @@ const cuerpoTabla = (user) => {
 };
 
 const generarTabla = (users) => {
-    const encabezado = encabezadoTabla();
-    const cuerpo = users.map(user => cuerpoTabla(user)).join("");
-    return encabezado + cuerpo + "</tbody></table>";
+  const encabezado = encabezadoTabla();
+  const cuerpo = users.map(user => cuerpoTabla(user)).join("");
+  return encabezado + cuerpo + "</tbody></table>";
 };
 
 const mostrarTabla = (tabla) => document.getElementById("generarTabla").innerHTML = tabla;
 
 const obtenerDatos = async (url) => {
-    try {
-        spinnerContainer.style.display = 'flex';
-        const resolve = await fetch(url);
-        const requestData = await resolve.json();
-        const users = requestData.data;
-        const tabla = generarTabla(users);
-        mostrarTabla(tabla);
-    } catch (err) {
-        console.error('Error al obtener datos: ', err);
-    } finally{
-        spinnerContainer.style.display = 'none';
-    }
+  try {
+    //spinnerContainer.style.display = 'flex';
+    const resolve = await fetch(url);
+    const requestData = await resolve.json();
+    const users = requestData.data;
+    setTimeout(() => {
+      const tabla = generarTabla(users);
+      mostrarTabla(tabla);
+      spinnerContainer.style.display = 'none';
+    }, 5000);
+  } catch (err) {
+    console.error('Error al obtener datos: ', err);
+    spinnerContainer.style.display = 'none';
+  }
 }
 
 const handleButton = () => {
-    spinnerContainer.style.display = 'flex';
-    obtenerDatos("https://reqres.in/api/users?delay=3");
+  spinnerContainer.style.display = 'flex';
+  obtenerDatos("https://reqres.in/api/users?delay=3");
 };
